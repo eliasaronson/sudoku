@@ -1,0 +1,117 @@
+package sudoku;
+
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.TilePane;
+import javafx.stage.Stage;
+
+public class SudokuGUI extends Application {
+	
+	private TextField tField[][] = new TextField[9][9];
+	private int[][] setUp  = new int[9][9];
+	private sudoku sudoku = new sudoku(setUp);
+	
+
+	public static void main(String[] args) {
+		Application.launch(args);
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		TilePane tiles = new TilePane();
+		BorderPane root = new BorderPane();
+		HBox bottomBox = new HBox();
+		tiles.setPrefColumns(9);
+		tiles.setPrefRows(9);
+
+		int num;
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				tField[i][j] = new OneLetterTextField();
+				if ((i / 3 == 1 || j / 3 == 1) && (i / 3 != j / 3)) {
+					tField[i][j].setStyle("-fx-control-inner-background: #e6ffff;");
+				}
+				tField[i][j].setPrefSize(50, 50);
+				tField[i][j].setAlignment(Pos.CENTER);
+				tiles.getChildren().add(tField[i][j]);
+
+				num = sudoku.getNumber(i, j);
+				if (num != 0) {
+					tField[i][j].setText(String.valueOf(num));
+				}
+			}
+		}
+
+		Button solveButton = new Button("Solve");
+		solveButton.setOnAction(e -> solve());
+
+		Button clearButton = new Button("Clear");
+		clearButton.setOnAction(e -> reset());
+
+		bottomBox.setSpacing(5);
+		bottomBox.setPadding(new Insets(10, 10, 10, 10));
+		bottomBox.getChildren().addAll(solveButton, clearButton);
+		bottomBox.setAlignment(Pos.CENTER);
+
+		root.setCenter(tiles);
+		root.setBottom(bottomBox);
+
+		Scene scene = new Scene(root);
+		primaryStage.setTitle("SudokuSolver");
+		primaryStage.setScene(scene);
+		primaryStage.setResizable(false);
+		primaryStage.show();
+
+	}
+	
+	private void reset() {
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				tField[i][j].clear();
+			}
+		}
+	}
+
+	private void solve() {
+		String tFieldCont;
+		int[][] board = new int[9][9];
+		
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				tFieldCont = tField[i][j].getText();
+				if (tFieldCont.isEmpty()) {
+					board[i][j] = 0;
+				} else {
+					board[i][j] = Integer.parseInt(tFieldCont);
+				}
+			}
+		}
+		sudoku = new sudoku(board);
+		int[][] solve = sudoku.solve();
+		if (solve != null) {
+			for (int i = 0; i < 9; i++) {
+				for (int k = 0; k < 9; k++) {
+					tField[i][k].setText(String.valueOf(sudoku.getNumber(i, k)));
+				}
+			}
+		} else {
+			Alert a = new Alert(AlertType.ERROR);
+			a.setHeaderText("Error");
+			a.setTitle("Olösligt Sudoku");
+			a.setContentText("Går ej att lösa!");
+			a.showAndWait();
+		}
+
+	}
+
+	
+
+}
