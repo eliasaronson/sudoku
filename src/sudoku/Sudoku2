@@ -29,13 +29,14 @@ public class sudoku {
 
 	public int[][] solve() {
 		if (!backtrackSolve()) {
-			System.out.println("Denna sudoku kan inte lösas");
+			System.out.println("Gick ej att lösa");
 			return null;
+		} else {
+			return sudoku;
 		}
 
-		return sudoku;
-
 	}
+	
 
 	/**
 	 * Kollar om det är möjligt att sätta x i en viss specifik ruta
@@ -103,3 +104,4 @@ public class sudoku {
 		return false; // Backtracking
 	}
 }
+
