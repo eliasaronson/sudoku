@@ -1,0 +1,84 @@
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+public class TestSudoku_junit {
+	private Sudoku s;
+	private int sudoku[][];
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		s = new Sudoku(sudoku);
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		s = null;
+	}
+
+	@Test
+	public void testOwnSudoku() {
+			s = new Sudoku(new int[][] { //kommer  på själv 
+	        {3, 0, 9, 5, 0, 8, 4, 0, 0},
+	        {5, 2, 0, 0, 0, 0, 0, 0, 0},
+	        {0, 8, 7, 0, 0, 0, 0, 3, 1},
+	        {0, 0, 3, 0, 1, 0, 0, 8, 0},
+	        {9, 0, 0, 8, 6, 3, 0, 0, 5},
+	        {0, 5, 0, 0, 9, 0, 6, 0, 0},
+	        {1, 3, 0, 0, 0, 0, 2, 5, 0},
+	        {0, 0, 0, 0, 0, 0, 0, 7, 4},
+	        {0, 0, 5, 2, 0, 6, 3, 0, 0}
+	    });
+		assertTrue("My own solvable sudoku", s.solve());
+	}
+	
+	@Test
+	public void testImpossibleSudoku() {
+		s = new Sudoku(new int[][] { //Går ej att lösa
+			{1, 1, 0, 0, 0, 0, 0, 0, 0},
+	        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+	        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+	        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+	        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+	        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+	        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+	        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+	        {0, 0, 0, 0, 0, 0, 0, 0, 0}
+	    });
+		assertFalse("Unresolvable sudoku", s.solve());
+	}
+		
+	@Test
+	public void testExample() {
+			s = new Sudoku(new int[][] { // från exempel i figur 1
+			{0, 0, 8, 0, 0, 9, 0, 6, 2},
+	        {0, 0, 0, 0, 0, 0, 0, 0, 5},
+	        {1, 0, 2, 5, 0, 0, 0, 0, 0},
+	        {0, 0, 0, 2, 1, 0, 0, 9, 0},
+	        {0, 5, 0, 0, 0, 0, 6, 0, 0},
+	        {6, 0, 0, 0, 0, 0, 0, 2, 8},
+	        {4, 1, 0, 6, 0, 8, 0, 0, 0},
+	        {8, 6, 0, 0, 3, 0, 1, 0, 0},
+	        {0, 0, 0, 0, 0, 0, 4, 0, 0}
+		}); 
+		assertTrue("sudoku from example in figure 1", s.solve());
+	}
+	@Test
+	public void testEmptySudoku() {
+			s = new Sudoku(new int[][] { //då alla rutor är tomma
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0}
+        });
+		assertTrue("sudoku with no numbers", s.solve());
+	}
+}
