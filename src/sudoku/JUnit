@@ -21,7 +21,7 @@ public class TestSudoku_junit {
 
 	@Test
 	public void testOwnSudoku() {
-			s = new Sudoku(new int[][] { //kommer  på själv 
+			s = new Sudoku(new int[][] {  
 	        {3, 0, 9, 5, 0, 8, 4, 0, 0},
 	        {5, 2, 0, 0, 0, 0, 0, 0, 0},
 	        {0, 8, 7, 0, 0, 0, 0, 3, 1},
@@ -37,7 +37,7 @@ public class TestSudoku_junit {
 	
 	@Test
 	public void testImpossibleSudoku() {
-		s = new Sudoku(new int[][] { //Går ej att lösa
+		s = new Sudoku(new int[][] { 
 			{1, 1, 0, 0, 0, 0, 0, 0, 0},
 	        {0, 0, 0, 0, 0, 0, 0, 0, 0},
 	        {0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -48,12 +48,12 @@ public class TestSudoku_junit {
 	        {0, 0, 0, 0, 0, 0, 0, 0, 0},
 	        {0, 0, 0, 0, 0, 0, 0, 0, 0}
 	    });
-		assertFalse("Unresolvable sudoku", s.solve());
+		assertFalse("Unsolvable sudoku", s.solve());
 	}
 		
 	@Test
 	public void testExample() {
-			s = new Sudoku(new int[][] { // från exempel i figur 1
+			s = new Sudoku(new int[][] { 
 			{0, 0, 8, 0, 0, 9, 0, 6, 2},
 	        {0, 0, 0, 0, 0, 0, 0, 0, 5},
 	        {1, 0, 2, 5, 0, 0, 0, 0, 0},
@@ -64,11 +64,11 @@ public class TestSudoku_junit {
 	        {8, 6, 0, 0, 3, 0, 1, 0, 0},
 	        {0, 0, 0, 0, 0, 0, 4, 0, 0}
 		}); 
-		assertTrue("sudoku from example in figure 1", s.solve());
+		assertTrue("Sudoku from example in figure 1", s.solve());
 	}
 	@Test
 	public void testEmptySudoku() {
-			s = new Sudoku(new int[][] { //då alla rutor är tomma
+			s = new Sudoku(new int[][] { 
             {0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -79,6 +79,6 @@ public class TestSudoku_junit {
             {0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0}
         });
-		assertTrue("sudoku with no numbers", s.solve());
+		assertTrue("Sudoku with no numbers", s.solve());
 	}
 }
