@@ -1,24 +1,23 @@
-package sudoku;
 
-public class sudoku {
+public class Sudoku {
 
-	private int sudoku[][];
-	private int n = 9;
+    private int sudoku[][];
+    private int n = 9;
 
-	public sudoku(int sudoku[][]) {
-		this.sudoku = sudoku;
-	}
+    public Sudoku(int sudoku[][]) {
+        this.sudoku = sudoku;
+    }
 
-	public int getNumber(int l, int k) {
-		return sudoku[l][k];
-	}
-
-	public int setNumber(int r, int c, int n) {
+    public int getNumber(int l, int k) {
+    		return sudoku[l][k];
+    }
+    
+    public int setNumber(int r, int c, int n) {
 		sudoku[r][c] = n;
 		return n;
 	}
-
-	public void print() {
+    
+    public void print() {
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
 				System.out.print(sudoku[i][j] + " ");
@@ -26,82 +25,103 @@ public class sudoku {
 			System.out.println();
 		}
 	}
-
-	public int[][] solve() {
-		if (!backtrackSolve()) {
-			System.out.println("Gick ej att lösa");
-			return null;
-		} else {
-			return sudoku;
-		}
-
-	}
-	
-
-	/**
-	 * Kollar om det är möjligt att sätta x i en viss specifik ruta
-	 */
-	public boolean ifPossible(int i, int j, int x) {
-		// Undersöker om x finns med på brädan horisontellt, dvs i de olika raderna. Om
-		// den finns returneras false
-		for (int col = 0; col < n; col++) {
-			if (sudoku[i][col] == x) {
-				return false;
-			}
-		}
-		// Undersöker om x finns med på brädan vertikalt, dvs i de olika kolumnerna
-		for (int r = 0; r < n; r++) {
-			if (sudoku[r][j] == x) {
-				return false;
-			}
-		}
-		// Undersöker om x finns inom en viss region, 3x3 box
-		int boxRow = i - i % 3;
-		int boxColumn = j - j % 3;
-
-		for (int ii = 0; ii < 3; ii++) {
-			for (int jj = 0; jj < 3; jj++) {
-				if (sudoku[boxRow + ii][boxColumn + jj] == x) {
-					return false;
+    
+    /** anropar metoden backtracksolve för att se om sudokut går att lösa */
+    public boolean solve() {
+    	
+        if(backtrackSolve(0,0))
+        {
+        	return true;
+        }
+        else 
+        {
+        	System.out.println("Sudokut går inte att lösa");
+        	return false;
+        }
+    }
+    
+    private boolean backtrackSolve(int row, int col)
+    {
+    	if(row == 9)
+    	{
+    		return true;
+    	}
+    	if(sudoku[row][col] == 0)
+    	{
+    		for (int i = 1; i <= 9; i++) 
+    		{
+				sudoku[row][col] = i;
+				
+				if(ifPossible(row, col))
+				{
+					if(col == 8)
+					{
+						if(backtrackSolve(row + 1, 0))
+						{
+							return true;
+						}
+					}
+					else
+					{
+						if(backtrackSolve(row, col + 1))
+						{
+							return true;
+						}
+					}
 				}
 			}
-		}
-		return true;
-	}
+    		sudoku[row][col] = 0;
+			return false;
+    	}
+    	else
+    	{
+    		if(ifPossible(row, col))
+    		{
+    			if(col == 8)
+    			{
+    				if(backtrackSolve(row + 1, 0))
+    				{
+    					return true;
+    				}
+    			}
+    			else
+    			{
+    				if(backtrackSolve(row, col + 1))
+    				{
+    					return true;
+    				}
+    			}
+    		}
+    	}
+    	return false;
+    }
+  
+    /**Kollar om det är möjligt att sätta x i en viss specifik ruta */
+    public boolean ifPossible(int row, int col) {
+    	
+        /** Undersöker om x finns med på brädan horisontellt och vertikalt, dvs i de olika raderna. Om den finns returneras false */
+        for (int i = 0; i < n; i++) {
+            if (sudoku[row][i] == sudoku[row][col] && i != col) {
+                return false;
+            }
+            if (sudoku[i][col] == sudoku[row][col] && i != row) {
+                return false;
+            }
+        }
+        /** Undersöker om x finns inom en viss region, 3x3 box */
+        int r = row - row % 3;
+        int c = col - col % 3;
 
-	public boolean backtrackSolve() {
-		int i = 0;
-		int j = 0;
-		boolean ifEmptybox = false;
-
-		for (int k = 0; k < n && !ifEmptybox; k++) {
-			for (int l = 0; l < n && !ifEmptybox; l++) {
-				if (sudoku[k][l] == 0) { // Om rutan är tom sätts ifEmptybox = true.
-					ifEmptybox = true;
-					i = k;
-					j = l;
-				}
-			}
-		}
-		if (!ifEmptybox) {
-			return true;
-		}
-
-		for (int x = 1; x < 10; x++) {
-
-			if (ifPossible(i, j, x)) {
-				sudoku[i][j] = x; // Efter att ha kollat så att x inte finns med på brädan så lägger vi till x på
-									// rad i på kolum j
-
-				if (backtrackSolve()) { // rekursivt kollar om detta sedan leder till en lösning eller inte.
-					return true; // om det inte leder till en lösning, så provar vi nästa nummer för den aktuella
-									// tomma rutan
-
-				}
-				sudoku[i][j] = 0; // Om inga av numren från 1 till 9 leder till en lösning, returneras false
-			}
-		}
-		return false; // Backtracking
-	}
+        for (int ii = r; ii < 3 + r ; ii++) {
+            for (int jj = c; jj < 3 + c; jj++) {
+                if ((sudoku[ii][jj] == sudoku[row][col]) && ii != row && jj != col) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
+
+
 
